@@ -97,7 +97,9 @@
     "airbnb-base"
   ],
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
   ],
   "settings": {}
 }
