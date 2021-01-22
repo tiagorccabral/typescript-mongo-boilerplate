@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "./node_modules/eslint/bin/eslint.js  src --ext .ts"
+    "lint": "./node_modules/eslint/bin/eslint.js  src --ext .ts",
+    "setup": "chmod +x ./setup.sh && ./setup.sh"
   },
   "repository": {
     "type": "git",
