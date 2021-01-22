@@ -1,0 +1,24 @@
+{
+  "name": "typescript-mongo-boilerplate",
+  "version": "1.0.0",
+  "description": "A boilerplate of an API project using Express, MongoDB and Typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tiagorccabral/typescript-mongo-boilerplate.git"
+  },
+  "keywords": [
+    "monogo",
+    "express",
+    "typescript"
+  ],
+  "author": "Tiago Cabral",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tiagorccabral/typescript-mongo-boilerplate/issues"
+  },
+  "homepage": "https://github.com/tiagorccabral/typescript-mongo-boilerplate#readme"
+}
