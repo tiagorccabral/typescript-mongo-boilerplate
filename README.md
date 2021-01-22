@@ -2,7 +2,7 @@
 
 ## About
 
-A complete Node.JS starter project to bootstrap any projects that you may want to create Express/Sequelize as an API.
+A complete Node.JS starter project to bootstrap any projects that you may want to create with the stack Typescript + Express + MongoDB serving as an API.
 
 ## How to install
 
