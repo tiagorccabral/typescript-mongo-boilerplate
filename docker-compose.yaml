@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+    volumes:
+      - .:/home/node-typescript-starter
+      - /home/node-typescript-starter/node_modules
+    ports:
+      - '3000:3000'
+    command: ['yarn', 'dev']
