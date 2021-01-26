@@ -2,7 +2,7 @@
 node_modules
 
 # ENV files
-.env
+env
 
 # VSCode files
 .vscode

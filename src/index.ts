@@ -1,9 +1,16 @@
 import app from './app';
 import config from './config/config';
 import logger from './config/logger';
+import MongoConnection from './config/mongo-connection';
 
-const server = app.listen(config.port, async () => {
-  logger.info(`Listening to port ${config.port}`);
+const mongoConnection = new MongoConnection(config.database.isMongoCloudProvided);
+
+let server: any = null;
+
+mongoConnection.connect(() => {
+  server = app.listen(config.port, async () => {
+    logger.info(`Listening to port ${config.port}`);
+  });
 });
 
 const exitHandler = () => {
