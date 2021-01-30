@@ -1,1 +1,1 @@
-cp ".env.example" ".env"
+cp -R "env-example" "env"

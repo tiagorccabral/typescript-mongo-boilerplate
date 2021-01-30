@@ -17,12 +17,12 @@ git clone https://github.com/tiagorccabral/typescript-mongo-boilerplate.git
 yarn install
 ```
 
-3 - Then copy the .env.example file into a .env
+3 - Then copy the contents of ***env-example*** file into a folder called ***env*** (use the following script)
 ```bash
 yarn setup
 ```
 
-This command will copy the .env.example file to a .env file (change here the variables if needed)
+This command will copy the contents of ***env-example*** file into a new folder ***env*** (change here the variables inside these files as needed).
 
 ## Starting the server
 

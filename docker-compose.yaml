@@ -1,6 +1,12 @@
 version: '3.8'
 
 services:
+  mongodb:
+    image: 'mongo'
+    volumes:
+      - data:/data/db
+    env_file:
+      - ./env/mongo.env
   api:
     build:
       context: .
@@ -9,4 +15,9 @@ services:
       - /home/node-typescript-starter/node_modules
     ports:
       - '3000:3000'
+    depends_on:
+      - mongodb
     command: ['yarn', 'dev']
+
+volumes:
+  data:
