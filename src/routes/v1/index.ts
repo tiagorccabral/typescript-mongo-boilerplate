@@ -7,6 +7,6 @@ export const router: express.Router = express.Router();
 
 router.use('/v1', [
   router.use('/health', healthChecksRouter),
-  router.use('/users', usersRouter),
-  authRouter
+  router.use('/auth', authRouter),
+  router.use('/users', usersRouter)
 ]);
