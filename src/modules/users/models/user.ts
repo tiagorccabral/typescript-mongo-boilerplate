@@ -41,6 +41,14 @@ userSchema.pre<IUserDoc>('save', async function (next) {
 });
 
 /**
+ * Statics
+ */
+userSchema.static('emailIsTaken', async function (email: string) {
+  const foundUser = await this.findOne({ email });
+  return !!foundUser;
+});
+
+/**
  * Methods
  */
 userSchema.methods.comparePassword = function (this: IUserDoc, password: string): Promise<boolean> {

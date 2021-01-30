@@ -11,7 +11,5 @@ export interface IUserDoc extends IUser, Document {
 }
 
 export interface IUserModel extends Model<IUserDoc> {
+  emailIsTaken(email: string): Promise<boolean>
 }
-
-// export interface IUser extends IUserDocument {
-// }
