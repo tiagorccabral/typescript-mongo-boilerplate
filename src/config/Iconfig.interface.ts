@@ -16,6 +16,7 @@ type IDatabase = {
 
 type IJwt = {
   secret: string;
+  expDate: number;
 }
 
 export interface IConfig {
