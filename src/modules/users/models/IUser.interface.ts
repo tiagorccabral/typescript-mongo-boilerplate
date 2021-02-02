@@ -4,6 +4,7 @@ export interface IUser {
   email: string;
   name: string;
   password: string;
+  role: 'regular' | 'admin';
 }
 
 export interface IUserDoc extends IUser, Document {
