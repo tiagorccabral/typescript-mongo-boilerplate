@@ -87,12 +87,12 @@ export default class MongoConnection {
     } else {
       logger.log({
         level: 'info',
-        message: `Connecting to MongoDB at mongodb://${dbConfig.mongodbUsername}:${dbConfig.mongodbPassword}@${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`
+        message: `Connecting to MongoDB at mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`
       });
       mongoose.connect(
-        `mongodb://${dbConfig.mongodbUsername}:${dbConfig.mongodbPassword}@${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
+        `mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
         this.mongoConnectionOptions
-      ).catch();
+      ).catch(err => console.log(err));
     }
   }
 
