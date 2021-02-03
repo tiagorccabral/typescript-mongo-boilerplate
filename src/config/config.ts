@@ -11,10 +11,18 @@ const envVarsSchema = Joi.object({
   PORT: Joi.number().default(3000).required(),
   JWT_SECRET: Joi.string().required(),
   JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().required(),
-  MONGODB_URL: Joi.string().required(),
-  MONGODB_USERNAME: Joi.string().required(),
-  MONGODB_PASSWORD: Joi.string().required(),
-  MONGODB_DATABASE_NAME: Joi.string().required(),
+  MONGODB_DEVELOPMENT_URL: Joi.string().required(),
+  MONGODB_DEVELOPMENT_USERNAME: Joi.string().required(),
+  MONGODB_DEVELOPMENT_PASSWORD: Joi.string().required(),
+  MONGODB_DEVELOPMENT_DATABASE_NAME: Joi.string().required(),
+  MONGODB_TEST_URL: Joi.string().required(),
+  MONGODB_TEST_USERNAME: Joi.string().required(),
+  MONGODB_TEST_PASSWORD: Joi.string().required(),
+  MONGODB_TEST_DATABASE_NAME: Joi.string().required(),
+  MONGODB_PROD_URL: Joi.string().required(),
+  MONGODB_PROD_USERNAME: Joi.string().required(),
+  MONGODB_PROD_PASSWORD: Joi.string().required(),
+  MONGODB_PROD_DATABASE_NAME: Joi.string().required(),
   IS_MONGO_CLOUD_PROVIDED: Joi.boolean().required(),
   LOG_ERROR_TRACE_TO_STACK: Joi.bool().required()
 }).unknown();
@@ -34,10 +42,24 @@ const config: IConfig = {
   },
   database: {
     isMongoCloudProvided: envVars.IS_MONGO_CLOUD_PROVIDED,
-    mongodbUsername: envVars.MONGODB_USERNAME,
-    mongodbPassword: envVars.MONGODB_PASSWORD,
-    mongodbDatabaseName: envVars.MONGODB_DATABASE_NAME,
-    mongodbUrl: envVars.MONGODB_URL
+    development: {
+      mongodbUsername: envVars.MONGODB_DEVELOPMENT_USERNAME,
+      mongodbPassword: envVars.MONGODB_DEVELOPMENT_PASSWORD,
+      mongodbDatabaseName: envVars.MONGODB_DEVELOPMENT_DATABASE_NAME,
+      mongodbUrl: envVars.MONGODB_DEVELOPMENT_URL
+    },
+    test: {
+      mongodbUsername: envVars.MONGODB_TEST_USERNAME,
+      mongodbPassword: envVars.MONGODB_TEST_PASSWORD,
+      mongodbDatabaseName: envVars.MONGODB_TEST_DATABASE_NAME,
+      mongodbUrl: envVars.MONGODB_TEST_URL
+    },
+    production: {
+      mongodbUsername: envVars.MONGODB_PROD_USERNAME,
+      mongodbPassword: envVars.MONGODB_PROD_PASSWORD,
+      mongodbDatabaseName: envVars.MONGODB_PROD_DATABASE_NAME,
+      mongodbUrl: envVars.MONGODB_PROD_URL
+    }
   },
   system: {
     name: 'node-typescript-service'

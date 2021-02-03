@@ -2,6 +2,19 @@ import mongoose, { ConnectionOptions } from 'mongoose';
 import logger from './logger';
 import config from './config';
 
+const selectDbConfig = () => {
+  switch (config.env) {
+    case 'production':
+      return config.database.production;
+    case 'development':
+      return config.database.development;
+    default:
+      return config.database.test;
+  }
+};
+
+const dbConfig = selectDbConfig();
+
 (<any>mongoose).Promise = global.Promise;
 
 /** Callback for establishing or re-stablishing mongo connection */
@@ -25,7 +38,8 @@ export default class MongoConnection {
   /** Mongo connection options to be passed Mongoose */
   private readonly mongoConnectionOptions: ConnectionOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   };
 
   /**
@@ -65,21 +79,21 @@ export default class MongoConnection {
     if (this.isMongoCloudProvided) {
       logger.log({
         level: 'info',
-        message: `Connecting to MongoDB at ${config.database.mongodbUrl}`
+        message: `Connecting to MongoDB at ${dbConfig.mongodbUrl}`
       });
       mongoose.connect(
-        `mongodb+srv://${config.database.mongodbUsername}:${config.database.mongodbPassword}@${config.database.mongodbUrl}/${config.database.mongodbDatabaseName}?retryWrites=true&w=majority`,
+        `mongodb+srv://${dbConfig.mongodbUsername}:${dbConfig.mongodbPassword}@${dbConfig.mongodbUrl}/${dbConfig.mongodbDatabaseName}?retryWrites=true&w=majority`,
         this.mongoConnectionOptions
       ).catch();
     } else {
       logger.log({
         level: 'info',
-        message: `Connecting to MongoDB at mongodb://${config.database.mongodbUsername}:${config.database.mongodbPassword}@${config.database.mongodbUrl}:27017/${config.database.mongodbDatabaseName}?authSource=admin`
+        message: `Connecting to MongoDB at mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`
       });
       mongoose.connect(
-        `mongodb://${config.database.mongodbUsername}:${config.database.mongodbPassword}@${config.database.mongodbUrl}:27017/${config.database.mongodbDatabaseName}?authSource=admin`,
+        `mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
         this.mongoConnectionOptions
-      ).catch();
+      ).catch(err => console.log(err));
     }
   }
 
@@ -89,7 +103,7 @@ export default class MongoConnection {
   private onConnected = () => {
     logger.log({
       level: 'info',
-      message: `Connected to MongoDB at ${config.database.mongodbUrl}`
+      message: `Connected to MongoDB at ${dbConfig.mongodbUrl}`
     });
     this.isConnectedBefore = true;
     this.onConnectedCallback();
@@ -108,7 +122,7 @@ export default class MongoConnection {
   private onError = () => {
     logger.log({
       level: 'error',
-      message: `Could not connect to ${config.database.mongodbUrl}`
+      message: `Could not connect to ${dbConfig.mongodbUrl}`
     });
     setTimeout(() => {
       this.startConnection();
