@@ -38,7 +38,8 @@ export default class MongoConnection {
   /** Mongo connection options to be passed Mongoose */
   private readonly mongoConnectionOptions: ConnectionOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   };
 
   /**
