@@ -8,6 +8,13 @@ const createUser = {
   })
 };
 
+const getUser = {
+  params: Joi.object().keys({
+    id: Joi.string().required()
+  })
+};
+
 export {
+  getUser,
   createUser
 };
