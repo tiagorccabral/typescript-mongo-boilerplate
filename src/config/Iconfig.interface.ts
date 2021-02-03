@@ -8,10 +8,22 @@ type ILogs = {
 
 type IDatabase = {
   isMongoCloudProvided: boolean;
-  mongodbUrl: string;
-  mongodbUsername: string;
-  mongodbPassword: string;
-  mongodbDatabaseName: string;
+  development: {
+    mongodbUrl: string;
+    mongodbUsername: string;
+    mongodbPassword: string;
+    mongodbDatabaseName: string;
+  }, test: {
+    mongodbUrl: string;
+    mongodbUsername: string;
+    mongodbPassword: string;
+    mongodbDatabaseName: string;
+  }, production: {
+    mongodbUrl: string;
+    mongodbUsername: string;
+    mongodbPassword: string;
+    mongodbDatabaseName: string;
+  }
 }
 
 type IJwt = {
