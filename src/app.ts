@@ -1,8 +1,10 @@
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
+import passport from 'passport';
 import bodyParser from 'body-parser';
 import { router } from './routes/v1';
+import { jwtStrategy } from './config/passport';
 
 const app = express();
 
@@ -16,6 +18,10 @@ app.use(helmet());
 // Sets CORS and Accepted Origins
 app.use(cors());
 app.options('*', cors());
+
+// Initialize JWT options and strategy using Passport
+app.use(passport.initialize());
+passport.use('jwt', jwtStrategy);
 
 app.use(router);
 

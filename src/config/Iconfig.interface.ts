@@ -14,9 +14,15 @@ type IDatabase = {
   mongodbDatabaseName: string;
 }
 
+type IJwt = {
+  secret: string;
+  expDate: number;
+}
+
 export interface IConfig {
   env: string;
   port: number;
+  jwt: IJwt;
   database: IDatabase;
   system: ISystem;
   logs: ILogs;

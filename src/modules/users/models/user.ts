@@ -3,6 +3,11 @@ import bcrypt from 'bcrypt';
 import config from '../../../config/config';
 import { IUser, IUserDoc, IUserModel } from './Iuser.interface';
 
+/**
+* User Roles
+*/
+const roles = ['regular', 'admin'];
+
 const UserSchemaFields: Record<keyof IUser, any> = {
   name: String,
   email: {
@@ -18,6 +23,11 @@ const UserSchemaFields: Record<keyof IUser, any> = {
     required: true,
     minlength: 6,
     maxlength: 128
+  },
+  role: {
+    type: String,
+    enum: roles,
+    default: 'regular'
   }
 };
 

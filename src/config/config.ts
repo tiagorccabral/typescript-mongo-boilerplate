@@ -9,6 +9,8 @@ dotenv.config({ path: path.join(__dirname, '../../env/node.env') });
 const envVarsSchema = Joi.object({
   NODE_ENV: Joi.string().valid('production', 'development', 'test').required(),
   PORT: Joi.number().default(3000).required(),
+  JWT_SECRET: Joi.string().required(),
+  JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().required(),
   MONGODB_URL: Joi.string().required(),
   MONGODB_USERNAME: Joi.string().required(),
   MONGODB_PASSWORD: Joi.string().required(),
@@ -26,6 +28,10 @@ if (error) {
 const config: IConfig = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  jwt: {
+    secret: envVars.JWT_SECRET,
+    expDate: envVars.JWT_ACCESS_EXPIRATION_MINUTES
+  },
   database: {
     isMongoCloudProvided: envVars.IS_MONGO_CLOUD_PROVIDED,
     mongodbUsername: envVars.MONGODB_USERNAME,

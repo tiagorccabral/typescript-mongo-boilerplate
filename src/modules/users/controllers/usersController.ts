@@ -3,11 +3,18 @@ import httpStatus from 'http-status';
 import { catchAsync } from '../../../helpers/catchAsync';
 import * as usersService from '../services/users.service';
 
+const getUser = catchAsync(async (req: Request, res: Response) => {
+  const { params } = req;
+  const user = await usersService.getUser(params.id);
+  res.status(httpStatus.OK).send({ user });
+});
+
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const user = await usersService.createUser(req.body);
   res.status(httpStatus.CREATED).send({ user });
 });
 
 export default {
-  createUser
+  createUser,
+  getUser
 };
