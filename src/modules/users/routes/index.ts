@@ -1,5 +1,5 @@
 import express from 'express';
-import verifyAuthorization from '../../../middlewares/verifyAuthorization';
+import requireCurrentUser from '../../../middlewares/requireCurrentUser';
 import validate from '../../../middlewares/validate';
 import usersController from '../controllers/usersController';
 import * as validations from './validations';
@@ -10,4 +10,4 @@ router.route('/')
   .post(validate(validations.createUser), usersController.createUser);
 
 router.route('/:id')
-  .get(verifyAuthorization(), validate(validations.getUser), usersController.getUser);
+  .get(requireCurrentUser(), validate(validations.getUser), usersController.getUser);
