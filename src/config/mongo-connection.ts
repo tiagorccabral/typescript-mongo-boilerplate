@@ -90,10 +90,20 @@ export default class MongoConnection {
         level: 'info',
         message: `Connecting to MongoDB at mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`
       });
-      mongoose.connect(
-        `mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
-        this.mongoConnectionOptions
-      ).catch(err => console.log(err));
+      if (
+        config.database.mongoRootUsername !== undefined
+        && config.database.mongoRootPassword !== undefined
+      ) {
+        mongoose.connect(
+          `mongodb://${config.database.mongoRootUsername}:${config.database.mongoRootPassword}@mongodb:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
+          this.mongoConnectionOptions
+        ).catch(err => console.log(err));
+      } else {
+        mongoose.connect(
+          `mongodb://${dbConfig.mongodbUrl}:27017/${dbConfig.mongodbDatabaseName}?authSource=admin`,
+          this.mongoConnectionOptions
+        ).catch(err => console.log(err));
+      }
     }
   }
 
