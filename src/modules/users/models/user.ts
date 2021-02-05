@@ -1,7 +1,7 @@
 import { model, Schema, Model } from 'mongoose';
 import bcrypt from 'bcrypt';
 import config from '../../../config/config';
-import { IUser, IUserDoc, IUserModel } from './Iuser.interface';
+import { IUser, IUserDoc, IUserModel } from './IUser.interface';
 
 /**
 * User Roles

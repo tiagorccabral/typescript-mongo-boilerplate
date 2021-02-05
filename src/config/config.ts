@@ -11,7 +11,8 @@ const envVarsSchema = Joi.object({
   PORT: Joi.number().default(3000).required(),
   JWT_SECRET: Joi.string().required(),
   JWT_ACCESS_EXPIRATION_MINUTES: Joi.number().required(),
-  MONGODB_DEVELOPMENT_URL: Joi.string().required(),
+  MONGO_INITDB_ROOT_USERNAME: Joi.string(),
+  MONGO_INITDB_ROOT_PASSWORD: Joi.string(),
   MONGODB_DEVELOPMENT_USERNAME: Joi.string().required(),
   MONGODB_DEVELOPMENT_PASSWORD: Joi.string().required(),
   MONGODB_DEVELOPMENT_DATABASE_NAME: Joi.string().required(),
@@ -41,6 +42,8 @@ const config: IConfig = {
     expDate: envVars.JWT_ACCESS_EXPIRATION_MINUTES
   },
   database: {
+    mongoRootUsername: envVars.MONGO_INITDB_ROOT_USERNAME,
+    mongoRootPassword: envVars.MONGO_INITDB_ROOT_PASSWORD,
     isMongoCloudProvided: envVars.IS_MONGO_CLOUD_PROVIDED,
     development: {
       mongodbUsername: envVars.MONGODB_DEVELOPMENT_USERNAME,

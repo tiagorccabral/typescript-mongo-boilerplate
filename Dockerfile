@@ -1,10 +1,10 @@
 FROM node:14.15.4-alpine3.10
 
-RUN mkdir -p /home/node-typescript-starter && chown -R node:node /home/node-typescript-starter
+RUN mkdir -p /home/app && chown -R node:node /home/app
 RUN apk add --no-cache bash
 
 # Creates the work directory for the project
-WORKDIR /home/node-typescript-starter
+WORKDIR /home/app
 
 COPY package.json yarn.lock ./
 

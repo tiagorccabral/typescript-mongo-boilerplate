@@ -2,7 +2,7 @@ import { isValidObjectId } from 'mongoose';
 import httpStatus from 'http-status';
 import User from '../models/user';
 
-import { IUserDoc } from '../models/Iuser.interface';
+import { IUserDoc } from '../models/IUser.interface';
 import ApiError from '../../../errors/apiError';
 
 const getUser = async (userID: string): Promise<IUserDoc> => {
