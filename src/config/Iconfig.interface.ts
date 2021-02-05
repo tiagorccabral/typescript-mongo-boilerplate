@@ -8,6 +8,8 @@ type ILogs = {
 
 type IDatabase = {
   isMongoCloudProvided: boolean;
+  mongoRootUsername: string;
+  mongoRootPassword: boolean;
   development: {
     mongodbUrl: string;
     mongodbUsername: string;
