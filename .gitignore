@@ -6,3 +6,6 @@ env
 
 # VSCode files
 .vscode
+
+# Coverage files
+.nyc_output
