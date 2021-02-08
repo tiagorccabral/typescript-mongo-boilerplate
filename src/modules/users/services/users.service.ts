@@ -25,9 +25,6 @@ const createUser = async (userData: { email: string, name: string, password: str
 const updateUser = async (
   userID: string, userData: { email?: string, name?: string }
 ): Promise<IUserDoc> => {
-  if (!isValidObjectId(userID)) {
-    throw new ApiError('User ID is not valid', httpStatus.BAD_REQUEST);
-  }
   if (
     userData.email !== undefined
     && userData.email !== null
