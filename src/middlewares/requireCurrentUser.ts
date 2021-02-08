@@ -31,6 +31,8 @@ function requireCurrentUser() {
         const { params } = req;
         const user = await User.findById(userId); // find user by its ID
 
+        if (user === null || user === undefined) return res.status(httpStatus.UNPROCESSABLE_ENTITY).send({ error: 'Invalid User ID' });
+
         if (user.id !== params.id) return res.status(httpStatus.UNAUTHORIZED).send({ error: 'You cannot access this content' });
 
         // authentication and authorization successful
