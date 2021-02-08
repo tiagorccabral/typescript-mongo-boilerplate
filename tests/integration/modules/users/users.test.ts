@@ -155,4 +155,101 @@ describe('Users routes', () => {
       });
     });
   });
+
+  describe('PATCH v1/users/:id', () => {
+    describe('Current user is logged in', () => {
+      let user: IUserDoc;
+      let authString: string;
+      describe('updates own user data', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+          user = await User.create({
+            email: 'user1@email.com', name: 'User', password: 'password123'
+          });
+          const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+          authString = `Bearer ${token.access.token}`;
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 200', async () => {
+          const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+            .set('authorization', authString)
+            .send({ email: 'user1@emailupdated.com', name: 'User Name' });
+          expect(response.status).to.equal(200);
+        });
+        it('should return user data updated', async () => {
+          const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+            .set('authorization', authString)
+            .send({ email: 'user1@emailupdated.com', name: 'User Name' });
+
+          expect(response.body.user.name).to.equal('User Name');
+          expect(response.body.user.email).to.equal('user1@emailupdated.com');
+        });
+      });
+      describe('can not update to existing e-mail', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+          user = await User.create({
+            email: 'user1@email.com', name: 'User', password: 'password123'
+          });
+          await User.create({
+            email: 'existing@email.com', name: 'User', password: 'password123'
+          });
+          const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+          authString = `Bearer ${token.access.token}`;
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 400', async () => {
+          const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+            .set('authorization', authString)
+            .send({ email: 'existing@email.com', name: 'User Name' });
+          expect(response.status).to.equal(400);
+        });
+        it('should return error message', async () => {
+          const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+            .set('authorization', authString)
+            .send({ email: 'existing@email.com', name: 'User Name' });
+
+          expect(response.text).to.include('Email already taken');
+        });
+      });
+    });
+
+    describe('Current user is not same as user to be updated', () => {
+      let user: IUserDoc;
+      let otherUser: IUserDoc;
+      let authString: string;
+      beforeEach(async () => {
+        await User.deleteMany({});
+        user = await User.create({
+          email: 'usertoupdate@email.com', name: 'User to Update', password: 'password123'
+        });
+        otherUser = await User.create({
+          email: 'otheruser@email.com', name: 'Other user', password: 'password123'
+        });
+        const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(otherUser);
+        authString = `Bearer ${token.access.token}`;
+      });
+      afterEach(async () => {
+        await User.deleteMany({});
+      });
+
+      it('should return 401', async () => {
+        const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+          .set('authorization', authString)
+          .send({ email: 'update@email.com', name: 'Updated Name' });
+        expect(response.status).to.equal(401);
+      });
+
+      it('should return error message', async () => {
+        const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+          .set('authorization', authString)
+          .send({ email: 'update@email.com', name: 'Updated Name' });
+        expect(response.text).to.include('You cannot access this content');
+      });
+    });
+  });
 });
