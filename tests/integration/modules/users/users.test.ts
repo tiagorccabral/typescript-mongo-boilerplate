@@ -57,6 +57,25 @@ describe('Users routes', () => {
           expect(response.body.user.email).to.equal(secondUser.email);
         });
       });
+      describe('retrieves not valid user ID', () => {
+        before(async () => {
+          await User.deleteMany({});
+          user = await User.create({ email: 'a@a.com', name: 'James Maxwell', password: 'password123' });
+          const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+          authString = `Bearer ${token.access.token}`;
+        });
+        after(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 400', async () => {
+          const response: Response = await request(app).get('/v1/users/nonexistent').set('authorization', authString);
+          expect(response.status).to.equal(400);
+        });
+        it('should return message saying User ID is not valid', async () => {
+          const response: Response = await request(app).get('/v1/users/nonexistent').set('authorization', authString);
+          expect(response.text).to.include('User ID is not valid');
+        });
+      });
     });
   });
 
@@ -249,6 +268,31 @@ describe('Users routes', () => {
           .set('authorization', authString)
           .send({ email: 'update@email.com', name: 'Updated Name' });
         expect(response.text).to.include('You cannot access this content');
+      });
+    });
+
+    describe('User is not logged in', () => {
+      let user: IUserDoc;
+      beforeEach(async () => {
+        await User.deleteMany({});
+        user = await User.create({
+          email: 'usertoupdate@email.com', name: 'User to Update', password: 'password123'
+        });
+      });
+      afterEach(async () => {
+        await User.deleteMany({});
+      });
+
+      it('should return 401', async () => {
+        const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+          .send({ email: 'update@email.com', name: 'Updated Name' });
+        expect(response.status).to.equal(401);
+      });
+
+      it('should return error message', async () => {
+        const response: Response = await request(app).patch(`/v1/users/${user.id}`)
+          .send({ email: 'update@email.com', name: 'Updated Name' });
+        expect(response.text).to.include('Please login');
       });
     });
   });
