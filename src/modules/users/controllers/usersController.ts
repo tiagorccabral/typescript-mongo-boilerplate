@@ -14,7 +14,20 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.CREATED).send({ user });
 });
 
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const { params } = req;
+  const user = await usersService.updateUser(params.id, req.body);
+  res.status(httpStatus.CREATED).send({ user });
+});
+
+const createAdminUser = catchAsync(async (req: Request, res: Response) => {
+  const user = await usersService.createAdminUser(req.body);
+  res.status(httpStatus.CREATED).send({ user });
+});
+
 export default {
+  getUser,
   createUser,
-  getUser
+  updateUser,
+  createAdminUser
 };
