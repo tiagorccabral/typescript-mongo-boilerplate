@@ -9,7 +9,12 @@ import { IUser, IUserDoc, IUserModel } from './IUser.interface';
 const roles = ['regular', 'admin'];
 
 const UserSchemaFields: Record<keyof IUser, any> = {
-  name: String,
+  name: {
+    type: String,
+    required: true,
+    minlength: 2,
+    maxlength: 128
+  },
   email: {
     type: String,
     match: /^\S+@\S+\.\S+$/,
