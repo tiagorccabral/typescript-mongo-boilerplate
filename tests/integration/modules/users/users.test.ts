@@ -296,4 +296,94 @@ describe('Users routes', () => {
       });
     });
   });
+
+  describe('DELETE v1/users/:id', () => {
+    describe('Current user is logged in', () => {
+      let user: IUserDoc;
+      let otherUser: IUserDoc;
+      let authString: string;
+      describe('deletes its user account', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+          user = await User.create({
+            email: 'user1@email.com', name: 'User', password: 'password123'
+          });
+          const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+          authString = `Bearer ${token.access.token}`;
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 204', async () => {
+          const response: Response = await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+          expect(response.status).to.equal(204);
+        });
+        it('should delete user from database', async () => {
+          await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+
+          const deletedUser = await User.findById(user.id);
+
+          expect(deletedUser).to.equal(null);
+        });
+      });
+    });
+
+    describe('Current user is not same as user to be deleted', () => {
+      let user: IUserDoc;
+      let otherUser: IUserDoc;
+      let authString: string;
+      beforeEach(async () => {
+        await User.deleteMany({});
+        user = await User.create({
+          email: 'user1@email.com', name: 'User', password: 'password123'
+        });
+        otherUser = await User.create({
+          email: 'existing@email.com', name: 'User', password: 'password123'
+        });
+        const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+        authString = `Bearer ${token.access.token}`;
+      });
+      afterEach(async () => {
+        await User.deleteMany({});
+      });
+      it('should return 401', async () => {
+        const response: Response = await request(app).delete(`/v1/users/${otherUser.id}`)
+          .set('authorization', authString);
+        expect(response.status).to.equal(401);
+      });
+      it('should return error message', async () => {
+        const response: Response = await request(app).delete(`/v1/users/${otherUser.id}`)
+          .set('authorization', authString);
+
+        expect(response.text).to.include('You cannot access this content');
+      });
+    });
+
+    describe('User is not logged in', () => {
+      let user: IUserDoc;
+      beforeEach(async () => {
+        await User.deleteMany({});
+        user = await User.create({
+          email: 'usertodelete@email.com', name: 'User to Delete', password: 'password123'
+        });
+      });
+      afterEach(async () => {
+        await User.deleteMany({});
+      });
+
+      it('should return 401', async () => {
+        const response: Response = await request(app).delete(`/v1/users/${user.id}`);
+
+        expect(response.status).to.equal(401);
+      });
+
+      it('should return error message', async () => {
+        const response: Response = await request(app).delete(`/v1/users/${user.id}`);
+
+        expect(response.text).to.include('Please login');
+      });
+    });
+  });
 });

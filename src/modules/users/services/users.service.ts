@@ -38,6 +38,12 @@ const updateUser = async (
   return updatedUser;
 };
 
+const deleteUser = async (userID: string): Promise<any> => {
+  const user = await getUser(userID);
+  const response = await User.deleteOne({ _id: user.id });
+  return response;
+};
+
 const createAdminUser = async (userData: { email: string, name: string, password: string }) => {
   if (await User.emailIsTaken(userData.email)) {
     throw new ApiError('Email already taken', httpStatus.BAD_REQUEST);
@@ -55,5 +61,6 @@ export {
   getUser,
   createUser,
   updateUser,
+  deleteUser,
   createAdminUser
 };
