@@ -175,6 +175,56 @@ describe('Users routes', () => {
     });
   });
 
+  describe('POST v1/users/', () => {
+    describe('User is not logged in', () => {
+      describe('creates a new user', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 201', async () => {
+          const response: Response = await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'User Name', password: 'password123' });
+
+          expect(response.status).to.equal(201);
+        });
+        it('should return data of created user', async () => {
+          const response: Response = await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'User Name', password: 'password123' });
+
+          expect(response.body.user.name).to.equal('User Name');
+          expect(response.body.user.email).to.equal('user@createduser.com');
+        });
+      });
+      describe('can not create user if e-mail already exists', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 400', async () => {
+          await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'First Name', password: 'password123' });
+          const response: Response = await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'Other Name', password: 'password321' });
+
+          expect(response.status).to.equal(400);
+        });
+        it('should return error message', async () => {
+          await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'First Name', password: 'password123' });
+          const response: Response = await request(app).post('/v1/users/')
+            .send({ email: 'user@createduser.com', name: 'Other Name', password: 'password321' });
+
+          expect(response.text).to.include('Email already taken');
+        });
+      });
+    });
+  });
+
   describe('PATCH v1/users/:id', () => {
     describe('Current user is logged in', () => {
       let user: IUserDoc;
@@ -300,7 +350,6 @@ describe('Users routes', () => {
   describe('DELETE v1/users/:id', () => {
     describe('Current user is logged in', () => {
       let user: IUserDoc;
-      let otherUser: IUserDoc;
       let authString: string;
       describe('deletes its user account', () => {
         beforeEach(async () => {
@@ -326,6 +375,34 @@ describe('Users routes', () => {
           const deletedUser = await User.findById(user.id);
 
           expect(deletedUser).to.equal(null);
+        });
+      });
+
+      describe('attempts to delete nonexistent account', () => {
+        beforeEach(async () => {
+          await User.deleteMany({});
+          user = await User.create({
+            email: 'user1@email.com', name: 'User', password: 'password123'
+          });
+          const token: tokenService.IAccessToken = await tokenService.generateAuthTokens(user);
+          authString = `Bearer ${token.access.token}`;
+        });
+        afterEach(async () => {
+          await User.deleteMany({});
+        });
+        it('should return 422', async () => {
+          await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+          const response: Response = await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+          expect(response.status).to.equal(422);
+        });
+        it('should return error message', async () => {
+          await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+          const response: Response = await request(app).delete(`/v1/users/${user.id}`)
+            .set('authorization', authString);
+          expect(response.text).to.include('Invalid User ID');
         });
       });
     });
