@@ -18,6 +18,12 @@ const updateUser = {
   })
 };
 
+const deleteUser = {
+  params: Joi.object().keys({
+    id: Joi.string().required()
+  })
+};
+
 const getUser = {
   params: Joi.object().keys({
     id: Joi.string().required()
@@ -27,5 +33,6 @@ const getUser = {
 export {
   getUser,
   updateUser,
-  createUser
+  createUser,
+  deleteUser
 };

@@ -20,6 +20,12 @@ const updateUser = catchAsync(async (req: Request, res: Response) => {
   res.status(httpStatus.OK).send({ user });
 });
 
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { params } = req;
+  const response = await usersService.deleteUser(params.id);
+  res.status(httpStatus.NO_CONTENT).send({ response });
+});
+
 const createAdminUser = catchAsync(async (req: Request, res: Response) => {
   const user = await usersService.createAdminUser(req.body);
   res.status(httpStatus.CREATED).send({ user });
@@ -29,5 +35,6 @@ export default {
   getUser,
   createUser,
   updateUser,
+  deleteUser,
   createAdminUser
 };

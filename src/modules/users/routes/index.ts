@@ -9,7 +9,8 @@ export const router: express.Router = express.Router();
 
 router.route('/:id')
   .get(verifyAuthorization(), validate(validations.getUser), usersController.getUser)
-  .patch(requireCurrentUser(), validate(validations.updateUser), usersController.updateUser);
+  .patch(requireCurrentUser(), validate(validations.updateUser), usersController.updateUser)
+  .delete(requireCurrentUser(), validate(validations.deleteUser), usersController.deleteUser);
 
 router.route('/')
   .post(validate(validations.createUser), usersController.createUser);
