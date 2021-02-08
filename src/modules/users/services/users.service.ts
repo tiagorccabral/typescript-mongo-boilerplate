@@ -35,7 +35,9 @@ const updateUser = async (
   ) {
     throw new ApiError('Email already taken', httpStatus.BAD_REQUEST);
   }
-  const updatedUser = await User.findOneAndUpdate({ _id: userID }, userData, { new: true });
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: userID }, userData, { new: true, useFindAndModify: false }
+  );
   return updatedUser;
 };
 

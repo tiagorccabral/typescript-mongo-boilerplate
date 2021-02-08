@@ -17,7 +17,7 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 const updateUser = catchAsync(async (req: Request, res: Response) => {
   const { params } = req;
   const user = await usersService.updateUser(params.id, req.body);
-  res.status(httpStatus.CREATED).send({ user });
+  res.status(httpStatus.OK).send({ user });
 });
 
 const createAdminUser = catchAsync(async (req: Request, res: Response) => {
