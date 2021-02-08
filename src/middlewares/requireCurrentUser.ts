@@ -7,9 +7,15 @@ function requireCurrentUser() {
   return [
     // authorize based on user role
     (req: Request, res: Response, next: NextFunction) => {
-      const authHeader = req.headers.authorization;
+      if (
+        req.headers === undefined
+        || req.headers.authorization === undefined
+        || !req.headers.authorization
+      ) {
+        return res.status(httpStatus.UNAUTHORIZED).send({ error: 'Please login' });
+      }
 
-      if (!authHeader) return res.status(httpStatus.UNAUTHORIZED).send({ error: 'Please login' });
+      const authHeader = req.headers.authorization;
 
       const parts = authHeader.split(' ');
 

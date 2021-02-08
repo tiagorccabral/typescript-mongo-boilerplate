@@ -22,4 +22,38 @@ const createUser = async (userData: { email: string, name: string, password: str
   return createdUser;
 };
 
-export { getUser, createUser };
+const updateUser = async (
+  userID: string, userData: { email?: string, name?: string }
+): Promise<IUserDoc> => {
+  if (
+    userData.email !== undefined
+    && userData.email !== null
+    && await User.emailIsTaken(userData.email)
+  ) {
+    throw new ApiError('Email already taken', httpStatus.BAD_REQUEST);
+  }
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: userID }, userData, { new: true, useFindAndModify: false }
+  );
+  return updatedUser;
+};
+
+const createAdminUser = async (userData: { email: string, name: string, password: string }) => {
+  if (await User.emailIsTaken(userData.email)) {
+    throw new ApiError('Email already taken', httpStatus.BAD_REQUEST);
+  }
+
+  const computedData: { email: string, name: string, password: string, role?: string } = userData;
+
+  computedData['role'] = 'admin';
+
+  const createdUser = await User.create(computedData);
+  return createdUser;
+};
+
+export {
+  getUser,
+  createUser,
+  updateUser,
+  createAdminUser
+};
