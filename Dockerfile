@@ -1,4 +1,4 @@
-FROM node:14.15.4-alpine3.10
+FROM node:14.16.0-alpine3.10
 
 RUN mkdir -p /home/app && chown -R node:node /home/app
 RUN apk add --no-cache bash
