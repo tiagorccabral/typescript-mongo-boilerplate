@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tsnodestarter-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tsnodestarter
+  template:
+    metadata:
+      labels:
+        app: tsnodestarter
+    spec:
+      containers:
+        - name: tsnodestarter
+          image: tiagorccabral/tsnodestarter:latest
+          env:
+            - name: PORT
+              value: '3000'
+            - name: JWT_SECRET
+              value: 'sup3r-dup3r-secr3t+'
+            - name: JWT_ACCESS_EXPIRATION_MINUTES
+              value: '30'
+            - name: LOG_ERROR_TRACE_TO_STACK
+              value: 'true'
+            - name: IS_MONGO_CLOUD_PROVIDED
+              value: 'true'
+            - name: MONGODB_DEVELOPMENT_USERNAME
+              value: 'testuser1'
+            - name: MONGODB_DEVELOPMENT_PASSWORD
+              value: 'VwVYoiI92H0MT1YX'
+            - name: MONGODB_DEVELOPMENT_URL
+              value: 'cluster0.y4cmh.mongodb.net'
+            - name: MONGODB_DEVELOPMENT_DATABASE_NAME
+              value: 'tsstarter-development'

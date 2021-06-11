@@ -1,0 +1,12 @@
+apiVersion: v1
+data:
+  JWT_ACCESS_EXPIRATION_MINUTES: "30"
+  JWT_SECRET: sup3r-dup3r-secr3t+
+  LOG_ERROR_TRACE_TO_STACK: "true"
+  PORT: "3000"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api-env-node-env
+  name: env-node-env

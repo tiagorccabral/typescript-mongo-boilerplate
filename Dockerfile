@@ -8,6 +8,8 @@ WORKDIR /home/app
 
 COPY package.json yarn.lock ./
 
+COPY init.sh ./
+
 USER node
 
 RUN yarn install --pure-lockfile

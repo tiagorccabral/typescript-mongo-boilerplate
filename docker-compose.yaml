@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 services:
   api:
@@ -18,11 +18,8 @@ services:
   mongodb:
     image: 'mongo'
     restart: unless-stopped
-    volumes:
-      - data:/data/db
     env_file:
       - ./env/mongo.env
 
 volumes:
-  data:
   node_modules:

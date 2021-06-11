@@ -1,0 +1,21 @@
+apiVersion: v1
+data:
+  IS_MONGO_CLOUD_PROVIDED: "true"
+  MONGODB_DEVELOPMENT_DATABASE_NAME: tsstarter-development
+  MONGODB_DEVELOPMENT_PASSWORD: VwVYoiI92H0MT1YX
+  MONGODB_DEVELOPMENT_URL: localhost
+  MONGODB_DEVELOPMENT_USERNAME: testuser1
+  MONGODB_PROD_DATABASE_NAME: tsstarter-prod
+  MONGODB_PROD_PASSWORD: VwVYoiI92H0MT1YX
+  MONGODB_PROD_URL: cluster0.y4cmh.mongodb.net
+  MONGODB_PROD_USERNAME: testuser1
+  MONGODB_TEST_DATABASE_NAME: tsstarter-test
+  MONGODB_TEST_PASSWORD: secret
+  MONGODB_TEST_URL: localhost
+  MONGODB_TEST_USERNAME: super
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: api-env-mongo-env
+  name: env-mongo-env
